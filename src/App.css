@@ -1,0 +1,73 @@
+.all {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  background-color: var(--background);
+}
+.main {
+  width: 80vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 2rem;
+  flex-grow: 1;
+  min-height: 100vh;
+}
+.body1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 0 2rem;
+  /* position: relative; */
+  /* background-color: #EFEFEF; */
+}
+/* input:focus,select:focus,textarea:focus{
+  outline-color: var(--blue);
+} */
+input,
+select,
+textarea {
+  padding: 0.5rem;
+}
+* {
+  box-sizing: border-box;
+}
+hr {
+  margin: 1rem 0;
+  color: inherit;
+  border: 0 !important;
+  height: 1px;
+  opacity: 0.25;
+  width: 80%;
+  background-color: var(--blue);
+}
+.error {
+  position: absolute;
+  color: red;
+  font-size: 12px;
+  bottom: -18px;
+  left: 0;
+}
+.subtitle {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  margin: 1rem 0;
+}
+.subtitle h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+.css-1ualgfl-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root {
+  height: 40px;
+}
+.css-161pkch {
+  padding: 0;
+  outline: none;
+}
+/* .css-md26zr-MuiInputBase-root-MuiOutlinedInput-root{
+  height: 40px;
+} */

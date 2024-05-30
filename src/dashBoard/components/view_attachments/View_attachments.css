@@ -1,0 +1,177 @@
+.dash__form-content_attach{
+    display: flex;
+    flex-direction: column;
+   
+  }
+  .dash__form-content_attach-header{
+    display: flex;
+    justify-content:flex-start ;
+    align-items: center;
+    margin: .5rem 0;
+  }
+  .dash__form-content_attach-header p{
+    color:var(--textColor);
+    font-family: Lato;
+    font-size: 16px;
+    font-weight: 500;
+  
+  }
+  
+  .dash__form-content_attach_upload-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1rem;
+    padding: 21px 33px 12px 32px;
+    border-radius: 10px;
+    gap: 10px;
+    background: var(--5, rgba(79, 156, 209, 0.10));
+    cursor: pointer;
+    border: 1px solid var(--blue);
+  }
+  .dash__form-content_attach_upload-card img{
+    width: 40px;
+    height: 40px;
+
+  }
+  
+  .dash__form-content_attach_upload-card button{
+    width: 100px;
+    height: 26px;
+    border-radius: 5px;
+    background: var(--blue);
+    color: #FFF;
+    font-family: Lato;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+  }
+  .dash__form-content_attach_upload-images{
+    width: 100%;
+  }
+  .dash__form-content_attach_upload-image{
+    width: 120px;
+  height: 110px;
+  position: relative;
+  
+  }
+  .dash__form-content_attach_upload-image:hover {
+   /* scale: 1.5; */
+   z-index: 3;
+  
+   
+  
+  }
+  .dash__form-content_attach_upload-image:hover .dash__form-content_attach_upload-image_hover{
+    display: flex;
+  }
+  .dash__form-content_attach_upload-image_file img{
+    position: absolute;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+
+  
+  }
+  
+  .dash__form-content_attach_upload-image_hover{
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    z-index: 5;
+     height: 100%;
+     width: 100%;
+    background-color: rgba(0, 0, 0, 0.7) ;
+    border-radius: 10px;
+  }
+  .dash__form-content_attach_upload-image_hover img{
+    width: 24px;
+  
+  }
+  .dash__form-content_attach_upload-image_hover img:hover{
+    scale: 1.3;
+  
+  }
+  .dash__form-content_attach-documents{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  
+  }
+  .dash__form-content_attach-documents_doc{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem;
+    height: 40px;
+    border-radius: 10px;
+    background: #FFF;
+    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
+    position: relative;
+  
+  }
+  /* .dash__form-content_attach-documents_doc img{
+   
+  } */
+  .dash__form-content_attach-documents_doc h4{
+    color: #292D32;
+    font-family: var(--my_font);
+    font-size: 16px;
+    font-weight: 400;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+    max-width: 180px;
+    
+  }
+  .dash__form-content_attach-documents_doc p{
+    color: rgba(41, 45, 50, 0.70);
+    font-family: var(--my_font);
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: auto;
+   
+  }
+
+
+
+
+
+
+
+
+
+.dash__form-content_attach_upload-image_zoom{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.imageScaled{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, .7);
+}
+.imageScaled img{
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  object-fit: contain;
+  
+
+}

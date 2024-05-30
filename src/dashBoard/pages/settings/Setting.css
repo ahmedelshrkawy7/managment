@@ -1,0 +1,40 @@
+.dash__settings{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+    
+}
+.dash__buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    width: 100%;
+    gap: 20px ;
+    
+}
+.dash__buttons div{
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    border-radius: 10px;
+    height: 60px;
+    color: var(--blue);
+    border-radius: 10px;
+    background: #FFF;
+    border: 0.2px solid #A0A0A0;
+    cursor: pointer;
+    text-align: center;
+    width: 45%;
+    flex-wrap: wrap;
+    font-size: 20px;
+}
+
+.active{
+    background-color: var(--blue) !important ;
+    color: #fff !important;
+
+}
+

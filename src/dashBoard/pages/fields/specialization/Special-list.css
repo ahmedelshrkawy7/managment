@@ -1,0 +1,84 @@
+table{
+    width: 100%;
+    border: 1px solid #fff;
+    border-radius: 10px;
+}
+
+th,td{
+    text-align: center;
+    border: 1px solid var(--2, #1370E4);
+    background: var(--5, rgba(79, 156, 209, 0.10));
+    height: 63px;
+    padding: 22px 0px;color: #292D32;
+    color: #292D32;
+    font-family: var(--my_font);
+    font-weight: 600;
+}
+td{
+    background-color: #fff;
+    color: rgba(41, 45, 50, 0.70);
+    font-family: var(--my_font);
+    font-size: 16px;
+    font-weight: 500;
+}
+th:first-child{
+    border-top: none;
+    border-left: none;
+    border-radius: 10px 0px 0px 0px;
+    width: 240px;
+}
+th:nth-child(2){
+    border-top: none;
+    width: 468px;
+
+}
+th:last-child{
+    border-top: none;
+    border-right: none;
+    border-radius: 0px 10px 0px 0px;
+    width: 366px;
+
+
+}
+tr:last-child td:first-child{
+    border-radius: 0px 0px 0px 10px;
+    border-left: none;
+    border-bottom: none;
+}
+tr:last-child td:nth-child(2){
+    
+    border-bottom: none;
+}
+tr:last-child td:last-child{
+    border-radius: 0px 10px 0px 0px;
+    border-right: none;
+    border-bottom: none;
+}
+
+td:first-child{
+   
+    border-left: none;
+}
+
+td:last-child{
+    
+    border-right: none;
+}
+td:last-child div{
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+    cursor: pointer;
+}
+
+
+.dash_form form table  tr {
+    width: 100%;
+
+}
+.dash_form form table tr td {
+    
+    text-align: center;
+}

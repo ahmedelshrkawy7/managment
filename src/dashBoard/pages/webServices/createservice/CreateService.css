@@ -1,0 +1,17 @@
+.postman .css-42b2qy{
+    width: 130px;
+    border-left: none;
+    padding: 0;
+}
+.postman select{
+    border-left: none !important;
+    border-radius: 0 5px 5px 0 ;
+    color: var(--blue);
+    
+}
+
+.postman input{
+    border-right: none !important;
+    border-radius: 5px 0 0 5px;
+}
+

@@ -1,0 +1,11 @@
+.dash_header{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+.dash_header h4{
+    color: var(--1, #4F9CD1);
+    font-family: var(--my_font);
+    font-size: 20px;
+    font-weight: 500;
+    }

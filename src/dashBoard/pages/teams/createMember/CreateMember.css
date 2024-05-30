@@ -1,0 +1,32 @@
+.dash__form-content_details-salary div{
+    position: relative;
+
+}
+.dash__form-content_details-salary input{
+    background-image:url(../../../assets//teams/dollar-circle.svg);  
+    background-position: left center;
+    background-repeat: no-repeat; 
+    background-size: 25px;
+    text-align: right;
+
+}
+
+.dash__form-content_details-salary div select{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+   
+}
+.salary{
+   
+
+}
+.TextField p{
+    position: absolute;
+}
+.css-1wc848c-MuiFormHelperText-root{
+    position: absolute;
+    top: 100%;
+}
+

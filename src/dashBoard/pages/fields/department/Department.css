@@ -1,0 +1,19 @@
+.dashboard__department{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 20px ;
+  padding: 1rem 0;
+}
+
+
+@media screen and (max-width:900px) {
+  .dashboard__department{
+    justify-content: center;
+    
+  }
+  
+}
+  

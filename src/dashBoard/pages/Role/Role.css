@@ -1,0 +1,23 @@
+.permission{
+
+}
+.permission {
+   border-bottom: .5px solid rgb(203, 203, 203);
+
+}
+.permission_role h2{
+    font-size: 22px;
+
+}
+
+input[type='checkbox']{
+    width: 25px;
+    height: 25px;
+    background-color: var(--blue);
+}
+
+.permission_check input:checked {
+    /* Add styles for the checked state */
+    background-color: #70db70 !important; /* Change the color to your desired color */
+    color: #fff; /* Change the text color if needed */
+  }

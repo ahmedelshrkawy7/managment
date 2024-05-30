@@ -1,0 +1,59 @@
+.field_card{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-around;
+  justify-self: center;
+  min-width: 250px;
+  width: 100%;
+  height: 140px;
+  border-radius: 12px;
+  background: #FFF;
+  box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.10);
+  padding: 1rem ;
+ 
+}
+.group:hover .field_card{
+
+background: var(--blue);
+
+}
+.group:hover .field_card div  {
+
+  color: #fff;
+
+}
+.group:hover .field_card div p {
+
+  color: #fff;
+
+}
+.group:hover img{
+
+  filter: brightness(0) saturate(100%) invert(93%) sepia(93%) saturate(13%) hue-rotate(328deg) brightness(105%) contrast(101%);
+
+}
+.field_card div{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+  color: #000;
+}
+
+.field_card div:first-child{
+  justify-content: space-between;
+}
+.field_card div:nth-child(2){
+  color: rgba(0, 0, 0, 0.8);
+font-family: var(--my_font);
+font-size: 16px;
+font-weight: 400;
+}
+.field_card div:last-child{
+  color: rgba(0, 0, 0, 0.8);
+font-family: var(--my_font);
+font-size: 16px;
+font-weight: 400;
+}

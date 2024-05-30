@@ -1,0 +1,30 @@
+
+.project_dash-numcards{
+  width: 100%;
+  /* display: grid;
+  grid-template-columns: repeat(auto-fit,260px);
+  align-items: center; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+
+}
+
+
+.project_dash-cards{
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  justify-content: flex-start;
+  gap: 2rem  ;
+
+  /* display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; */
+  /* gap: 1rem 79px ; */
+
+ 
+}

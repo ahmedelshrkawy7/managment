@@ -1,0 +1,72 @@
+.home_card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 300px;
+    width: 100%;
+    border-radius: 12px;
+    background: var(--backgroundCard);
+    padding:1rem ;
+    box-shadow: var(--ds-shadow-raised, 0 1px 1px rgba(9, 30, 66, 0.25), 0 0 1px 0 rgba(9, 30, 66, 0.31));
+    transition: .2s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+.home_card:hover{
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+    /* scale: 1.01; */
+}
+.home_card-1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+}
+.home_card-1_header{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+.home_card-1 h5{
+    color: var(--textcolor);
+    font-size: 18px;
+    font-weight: 600;
+}
+.home_card-1 p{
+    color: var(--textcolor);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px; /* 200% */
+}
+.home_card-1 p span{
+    color:  var(--textcolor);
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 20px; /* 166.667% */
+}
+.home_card-2{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1.5rem;
+
+}
+
+.home_card-2 h6{
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 600;
+}
+.home_card-2 p{
+    color: var(--textcolor);
+    font-size: 14px;
+    font-weight: 400;
+}
+.home_card-2 div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

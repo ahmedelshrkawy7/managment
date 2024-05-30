@@ -1,0 +1,282 @@
+.task_home-projects{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+}
+
+
+.task_title{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background: #FFF;
+    height: 40px;
+    flex-shrink: 0;
+    color: var(--2, #1370E4);
+    border: 0.4px solid var(--2, #1370E4);
+    padding: 1rem;
+    border-radius: 5px;
+    font-family: var(--my_font);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 1.5rem 0 1.5rem 0;
+    width: fit-content;
+}
+.task_home-projects-cards{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 2rem 0.5rem;
+}
+.task_home-Statistics{
+    display: flex;
+   align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+.task_home-Statistics_card{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--blue);
+    width: 259px;
+    height: 78px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    border: 1px solid  rgba(0, 0, 0, 0.05);
+
+}
+
+    
+    .task_home-Statistics_card-icon{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+    }
+    .task_home-Statistics_card-icon img{
+        width: 32px;
+        height: 32px;
+        flex-shrink: 0;
+    }
+    .task_home-Statistics_card-content{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        height: 100%;
+        width: 198px;
+        background-color: #fff;
+        padding: 0 1rem;
+        border-radius: 10px;
+
+    }
+    .task_home-Statistics_card-content h6{
+        color: var(--blue);
+        font-family: var(--my_font);
+        font-size: 20px;
+        font-weight: 500;
+        letter-spacing: 0.2px;
+
+    }
+    .task_home-Statistics_card-content h4{
+        color: var(--blue);
+        font-family: var(--my_font);
+        font-size: 32px;
+        font-weight: 600;
+        letter-spacing: 0.32px;
+
+    }
+    .task_home-phases{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        margin: 2rem 0;
+
+    }
+    .task_home-phases_content{
+        padding: 0 1rem 1rem 1rem;
+        box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.05);
+        border: 1px solid  rgba(0, 0, 0, 0.05);
+        background-color: #fff;
+
+    }
+    .task_home-phases_tasks{
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        gap: 1rem;
+    }
+    .task_home-phases_tasks-task{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        height: 80px;    
+        border-radius: 12px;
+        border: 0.4px solid rgba(121, 121, 121, 0.40);
+        background: #FFF; 
+        cursor: pointer;
+        overflow-x: auto;
+        flex-shrink: 0;
+       }
+    .task_home-phases_tasks-task>div{
+        padding: .5rem;
+    }
+
+
+    .task_home-phases_tasks-task_person{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 160px;
+        height: 100%;
+        background: var(--4, rgba(19, 112, 228, 0.10));
+        padding: .5rem;
+
+        }
+
+ 
+    .task_home-phases_tasks-task_person img{
+        width: 39.69px;
+        height: 39.69px;
+        border: .5px solid var(--blue);
+        border-radius: 50%;
+    }
+    .task_home-phases_tasks-task_name{
+        display: flex;
+        flex-direction: column;
+        padding: .5rem;
+
+    }
+    .task_home-phases_tasks-task_name h4{
+        color: #292D32;
+        leading-trim: both;
+        text-edge: cap;
+        font-family: var(--my_font);
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 25px; /* 178.571% */
+    }
+    .task_home-phases_tasks-task_name-content{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        width: 600px;
+    }
+    .span_space{
+        width: 1px;
+        height: 20px;
+        background: rgba(121, 121, 121, 0.30);
+        }
+    .task_home-phases_tasks-task_name-content_link{
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        width: 400px;
+    }
+    .task_home-phases_tasks-task_name-content_link img{
+        width: 12px;
+        height: 12px;
+    }
+    .task_home-phases_tasks-task_name-content_link h4{
+        color: var(--blue);
+        font-family: Lato;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 25px; /* 208.333% */
+    }
+    .task_home-phases_tasks-task_name-content_status{
+        display: flex;
+        align-items: center;
+    }
+    .task_home-phases_tasks-task_name-content_status h4{
+        color: #000;
+        font-family: var(--my_font);
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .task_home-phases_tasks-task_priority{
+        display: flex;
+        align-items: center;
+        width: 130px;
+    }
+    .task_home-phases_tasks-task_priority h2{
+        color: #000;
+        font-size: 12px;
+        font-weight: 500;
+
+}
+.task_home-phases_tasks-task_priority h6{
+    color: #292D32;
+    font-size: 15px;
+    font-weight: 500;
+}
+.task_home-phases_tasks-task_priority h6 span{
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 500;
+}
+.task_home-phases_tasks-task_progress progress{
+    width: 105px;
+    height: 10px;
+    color: var(--blue);
+
+}
+.task_home-phases_tasks-task_deadline{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+.task_home-phases_tasks-task_deadline h5{
+    color: #292D32;
+    font-size: 16px;
+    font-weight: 500;
+}
+.swiper{
+    padding: 2rem  0.5rem !important;
+    z-index: 100;
+}
+.swiper-button-next:after, .swiper-rtl .swiper-button-prev:after {
+    margin-left: 40px;
+}
+
+/* progress {
+    border-radius: 20px; 
+    margin-left: -11.5%; 
+    box-shadow: 1px 1px 4px rgba( 0, 0, 0, 0.2 ); 
+  }
+
+  progress::-webkit-progress-bar {
+    /background-color: yellow; 
+    border-radius: 20px;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: var(--blue);
+     border-radius: 20px; 
+  }
+
+  progress::-moz-progress-bar {
+    border-radius: 20px; 
+
+  } */
+
+
+  /* .carActive{
+    outline: 1px solid var(--blue);
+  }
+
+  */
