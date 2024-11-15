@@ -6,7 +6,7 @@ import eye from "../../assets/login/bi_eye.svg";
 import lock from "../../assets/login/sms.svg";
 import "./Login.css";
 import { serverApi } from "../../../App";
-import AuthContext from "../../Auth/AuthProvider";
+import AuthContext, { AuthProvider } from "../../Auth/AuthProvider";
 import { useNavigate } from "react-router-dom";
 import { replace, useFormik } from "formik";
 import * as Yup from "yup";
@@ -27,25 +27,19 @@ const Login = () => {
   const navigate = useNavigate();
   const { postData } = useAxios();
 
-  const { setAuth } = useContext(AuthContext);
+  const { Auth, setAuth } = useContext(AuthContext);
 
   const userRef = useRef();
   const { loader, setLoader } = useContext(LoadContext);
 
-  const [sucsess, setSuccess] = useState(false);
-
-  const server = useContext(serverApi);
   const [data, setData] = useState({});
   const [admin, setAdmin] = useState({});
   const [pwdshow, setPwdshow] = useState(false);
 
-  const handleChange = (e) => {
-    setData((prev) => {
-      return { ...prev, [e.target.name]: e.target.value };
-    });
-  };
-
   useEffect(() => {
+    if (Auth) {
+      navigate("/");
+    }
     userRef.current.focus();
     setLoader(false);
   }, []);
@@ -53,7 +47,6 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       await postData(["/login", formik.values]).then((response) => {
-        console.log("🚀 ~ awaitpostData ~ response:", response)
         setAdmin(response.data.data.user);
         setAuth(response.data.data);
         localStorage.setItem("logged", true);

@@ -31,6 +31,7 @@
     height: 80px;
     border-radius: 50%;
     border: 3px solid var(--blue);
+    object-fit: contain;
 
 }
 .project_card-content{

@@ -15,15 +15,14 @@ import {
   tech,
   admin,
 } from "./imports";
-import { Link, NavLink, useLocation } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import SideMenu from "../../components/SidebarMenu/SideMenu";
 import { PiDotOutlineFill } from "react-icons/pi";
 
 const Nsidebar = ({ toggle, side }) => {
   const role = localStorage.getItem("Roles");
-  console.log("🚀 ~ Nsidebar ~ role:", role);
   let arr = [];
-  console.log(JSON.parse(role) === "admin");
+  const navigate = useNavigate();
 
   if (JSON.parse(role) === "admin") {
     arr = [
@@ -116,7 +115,13 @@ const Nsidebar = ({ toggle, side }) => {
       { img: icon6, p: "Settings", nav: "Settings" },
     ];
   } else {
-    arr = [{ img: icon3, p: "My Tasks", nav: "Task Managment" }];
+    arr = [
+      {
+        img: Tasks,
+        p: "Tasks",
+        sub: [{ name: "Tasks List", path: "Tasks List" }],
+      },
+    ];
   }
 
   const [value, setValue] = useState([1]);
@@ -139,10 +144,6 @@ const Nsidebar = ({ toggle, side }) => {
     setParents(
       document.querySelectorAll(".dash__sidebar-content-icons .parent")
     );
-    //   parents.forEach((elment) => {
-
-    //   elment.classList.remove("active");
-    // });
   }, []);
 
   // parents.forEach((elment) => {

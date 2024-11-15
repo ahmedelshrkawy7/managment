@@ -16,14 +16,11 @@ const Table_member = ({ th, api, res_key, attributes }) => {
   const [toggle, setToggle] = useState(false);
   const [task_index, setTask_index] = useState();
   const navigate = useNavigate();
-  const {getData,deleteData} = useAxios()
+  const { getData, deleteData } = useAxios();
 
   const fetchPost = async () => {
     try {
-      await 
-    
-      getData(`/${api}`)
-      .then((res) => {
+      await getData(`/${api}`).then((res) => {
         setData(res?.[res_key]);
       });
     } catch (err) {
@@ -40,9 +37,7 @@ const Table_member = ({ th, api, res_key, attributes }) => {
   };
 
   const handleDelete = async (id) => {
-    await 
-  
-    deleteData(`Phases/tasks/${id}`)
+    await deleteData(`Phases/tasks/${id}`)
       .then(() => {
         setData(
           data.filter((project, index) => {
@@ -71,15 +66,15 @@ const Table_member = ({ th, api, res_key, attributes }) => {
           {data?.map((cell, index) => {
             return (
               <tr className="project_table-body">
-                <td>{cell.title}</td>
-                <td>{cell.start}</td>
-                <td>{cell.priority} </td>
-                <td>{cell.status} </td>
-                <td>{cell.end}</td>
+                <td>{cell?.title}</td>
+                <td>{cell?.start}</td>
+                <td>{cell?.priority} </td>
+                <td>{cell?.status} </td>
+                <td>{cell?.end}</td>
                 <td style={{ display: "flex", justifyContent: "space-around" }}>
                   {" "}
                   <img
-                    src={cell.employee.image}
+                    src={cell?.employee?.image}
                     alt="image"
                     style={{
                       width: "32px",
@@ -87,7 +82,7 @@ const Table_member = ({ th, api, res_key, attributes }) => {
                       borderRadius: "50%",
                     }}
                   />{" "}
-                  {cell.employee.first_name}&nbsp;{cell.employee.last_name}
+                  {cell?.employee?.first_name}&nbsp;{cell?.employee?.last_name}
                 </td>
 
                 <td className="project_table-body_icons">
@@ -104,10 +99,10 @@ const Table_member = ({ th, api, res_key, attributes }) => {
                     src={trash}
                     alt="eye"
                     onClick={() => {
-                      handleDelete(cell.id);
+                      handleDelete(cell?.id);
                     }}
                   />
-                  {/* <img src={setting} alt='eye' onClick={()=>{navigate(`/projects/Phase/${cell.id}`)}}/> */}
+                  {/* <img src={setting} alt='eye' onClick={()=>{navigate(`/projects/Phase/${cell?.id}`)}}/> */}
                 </td>
               </tr>
             );

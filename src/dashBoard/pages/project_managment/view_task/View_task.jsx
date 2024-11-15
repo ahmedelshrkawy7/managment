@@ -35,24 +35,22 @@ const View_task = () => {
   const { id } = useParams();
   const { setLoader } = useContext(LoadContext);
   const [task, setTask] = useState([]);
+  console.log("🚀 ~ task:", task);
   const [testObj, setTestobj] = useState([]);
-  const {getData} = useAxios()
+  console.log("🚀 ~ testObj:", testObj);
+  const { getData } = useAxios();
 
-  let string = [];
+  // let string = [];
 
-  task?.technologies?.map((tech) => {
-    string.push(tech.name + " , ");
-  });
+  // task?.technologies?.map((tech) => {
+  //   string.push(tech.name + " , ");
+  // });
 
   const fetchPost = async () => {
     try {
-      await 
-     
-      getData(`/Phases/tasks/${id}`)
-      .then((res) => {
-        console.log("🚀 ~ .then ~ res:", res)
+      await getData(`/Phases/tasks/${id}`).then((res) => {
         setTask(res?.task);
-        // setTestobj(res?.useCases);
+        setTestobj(res?.useCases);
       });
     } catch (err) {
       error(err.response.data.message);
@@ -64,24 +62,25 @@ const View_task = () => {
   useEffect(() => {
     fetchPost();
     setLoader(true);
-
-    console.log(task?.attachments);
   }, []);
 
   const items = [
-    { name: "Project Name", data: task.title },
-    { name: "Project Phase", data: task.phase_name },
-    { name: "Task Title", data: task.title },
-    { name: " Start Date ", data: task.start },
-    { name: "Deadline ", data: task.end },
-    { name: "Status", data: task.status },
-    { name: "Priority", data: task.priority },
-    { name: "Team Member", data: [...string] },
+    { name: "Project Name", data: task?.title },
+    { name: "Project Phase", data: task?.phase_name },
+    { name: "Task Title", data: task?.title },
+    { name: " Start Date ", data: task?.start },
+    { name: "Deadline ", data: task?.end },
+    { name: "Status", data: task?.status },
+    { name: "Priority", data: task?.priority },
+    {
+      name: "Team Member",
+      data: task?.employee?.first_name + " " + task?.employee?.last_name,
+    },
   ];
 
   return (
     <>
-      <Location main="Task View" head={task.title} />
+      <Location main="Task View" head={task?.title} />
       <div className="dash__form">
         <div className="dash__form-header">
           <img src={case1} alt="case" />
@@ -103,23 +102,22 @@ const View_task = () => {
                 zIndex: "1",
               }}
             >
-              <SwiperSlide>
-                <img
-                  src={img1}
-                  alt="swiper"
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </SwiperSlide>
-              <SwiperSlide>
-                <img
-                  src={img1}
-                  alt="swiper"
-                  style={{ width: "100%", height: "100%" }}
-                />
-              </SwiperSlide>
+              {testObj.map(({ case: { attachments } }, id) => {
+                return attachments.map((att) => {
+                  return (
+                    <SwiperSlide key={id}>
+                      <img
+                        src={att.path}
+                        alt="swiper"
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </SwiperSlide>
+                  );
+                });
+              })}
             </Swiper>
 
-            <div className="dash__viewtask-information">
+            <div className="dash__viewtask-information ms-4">
               <h2 className="head">General Information :</h2>
               <div className="dash__viewtask-information_content grid grid-cols-3 lg:grid-cols-2 sm:grid-cols-1 gap-4 px-4 ">
                 {items.map((item) => {
@@ -142,20 +140,21 @@ const View_task = () => {
             <div className="dash__viewtask-details px-4">
               <h2 className="head">task Description :</h2>
               <div className="dash__viewtask-details_content">
-                <h2>{task.description}</h2>
+                <h2>{task?.description}</h2>
               </div>
             </div>
             {!!testObj.length && (
               <div className="w-full p-4">
                 <h2 className="head">Testing Information :</h2>
                 <div className="w-full">
-                  {testObj.map((usecase) => {
+                  {testObj.map(({ case: Case }) => {
+                    console.log(Case);
                     return (
                       <>
                         <div className="w-fit min-w-10  flex justify-center items-center p-2 mt-8 border-blue-500 border-2 rounded-2xl">
-                          <h2 className="text-xl">{usecase.name}</h2>
+                          <h2 className="text-xl">{Case?.useCase?.name}</h2>
                         </div>
-                        {usecase.testCases?.map((test) => {
+                        {Case.testCases?.map((test) => {
                           return (
                             <div className="w-full  bg-blue-50 flex justify-start items-center  my-4 rounded-2xl">
                               {/* <p className=" w-full text-xl text-nowrap  text-ellipsis overflow-hidden">
@@ -169,19 +168,10 @@ const View_task = () => {
                                   <h2>
                                     <AccordionButton>
                                       <Box as="span" flex="1" textAlign="left">
-                                        {test}
+                                        {test.title}
                                       </Box>
-                                      <AccordionIcon />
                                     </AccordionButton>
                                   </h2>
-                                  <AccordionPanel pb={4}>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit, sed do eiusmod tempor
-                                    incididunt ut labore et dolore magna aliqua.
-                                    Ut enim ad minim veniam, quis nostrud
-                                    exercitation ullamco laboris nisi ut aliquip
-                                    ex ea commodo consequat.
-                                  </AccordionPanel>
                                 </AccordionItem>
                               </Accordion>
                             </div>

@@ -18,13 +18,11 @@ const Listadmin = () => {
 
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
-  const{getData,postData,deleteData}=useAxios()
+  const { getData, postData, deleteData } = useAxios();
 
   const fetchPost = async () => {
     try {
-      const response = await 
-
-      getData(`/users`)
+      const response = await getData(`/users`);
       setProjects(response["users"]);
     } catch (err) {
       console.log(err);
@@ -36,12 +34,11 @@ const Listadmin = () => {
   }, []);
 
   const handleDelete = async (id) => {
-    await
-    //  Axios({
+    await //  Axios({
     //   method: "Delete",
     //   url:,
     // })
-    deleteData( `/users/${id}`)
+    deleteData(`/users/${id}`)
       .then(() => {
         setProjects(
           projects.filter((project, index) => {
@@ -69,7 +66,6 @@ const Listadmin = () => {
 
             {projects?.map((project) => {
               const role = project?.roles?.reduce((acc, current) => {
-                console.log(current);
                 return acc + "," + current;
               });
 

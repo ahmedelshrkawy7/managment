@@ -10,7 +10,7 @@
     height: 140px;
     border-radius: 50%;
     border: 2px solid var(--1, #4F9CD1);
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .dash__form-content_links-view{

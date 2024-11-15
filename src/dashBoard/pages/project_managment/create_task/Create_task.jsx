@@ -14,7 +14,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import Selectinput from "../../../components/selectinput/Selectinput";
 import Addattachments from "./../../../components/Addattachments/Addattachments";
-import useAxios, { Axios } from "../../../api/Axios";
+import useAxios from "../../../api/Axios";
 import {
   Input,
   Textarea,
@@ -34,8 +34,9 @@ import { IoIosArrowDown } from "react-icons/io";
 const Create_task = () => {
   const { setLoader } = useContext(LoadContext);
   const navigate = useNavigate();
-  const location = useLocation();
-  const {getData,postData} = useAxios()
+  const { state } = useLocation();
+  console.log("🚀 ~ state:", state);
+  const { getData, postData } = useAxios();
   const linkSchema = Yup.string().url("Invalid URL format");
 
   const validationSchema = Yup.object().shape({
@@ -47,25 +48,24 @@ const Create_task = () => {
     project_id: Yup.string("shuold be string").required("required *"),
     phase_id: Yup.string().required("required *"),
     employee_id: Yup.string().required("required *"),
-    department: Yup.string().required("required *"),
+    // department: Yup.string().required("required *"),
     status: Yup.string().required("required *"),
     priority: Yup.string().required("required *"),
   });
-  console.log(location.state);
 
   const formik = useFormik({
     initialValues: {
-      title: location?.state?.title,
-      description: location?.state?.description,
-      status: location?.state?.status,
-      priority: location?.state?.priority,
-      start: location?.state?.start,
-      end: location?.state?.end,
-      project_id: "",
-      phase_id: "",
+      title: state?.title,
+      description: state?.description,
+      status: state?.status,
+      priority: state?.priority,
+      start: state?.start,
+      end: state?.end,
+      project_id: state?.project?.id,
+      phase_id: state?.phase_id,
       attachments: [],
-      links: [],
-      employee_id: "",
+      links: state?.links || [],
+      employee_id: state?.employee?.id,
       department: "",
       usecase: "",
       testcase: "",
@@ -80,10 +80,12 @@ const Create_task = () => {
     },
   });
 
+  console.log(formik.values);
+
   let [links, setLinks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [phases, setPhases] = useState([]);
-  const [departments, setDepartments] = useState([]);
+  // const [departments, setDepartments] = useState([]);
   const [members, setMembers] = useState([]);
   const [testcase, setTestcase] = useState("");
   const [spinner, setSpinner] = useState(false);
@@ -101,7 +103,7 @@ const Create_task = () => {
   //  console.log(data);
 
   const fetchPost = async () => {
-    const endpoints = ["projects", "departments"];
+    const endpoints = ["projects"];
     try {
       Promise.all(
         endpoints.map((endpoint) =>
@@ -109,10 +111,9 @@ const Create_task = () => {
             error(err.response.data.message);
           })
         )
-      ).then(([{ data: projects }, { data: departments }]) => {
-        setProjects(projects?.allprojects);
-        // setPhases(phases?.data?.Phases);
-        setDepartments(departments?.Departments);
+      ).then(([{ allprojects }]) => {
+        setProjects(allprojects);
+        // setDepartments(Departments);
       });
     } catch (err) {
       error(err?.response.data.message);
@@ -138,11 +139,13 @@ const Create_task = () => {
 
   useEffect(() => {
     if (!!formik?.values?.project_id) {
-      Axios.get(`/Phases/${formik.values.project_id}`)
+      getData(`/Phases/${formik.values.project_id}`)
         .then((res) => {
-          setPhases(res?.data?.data?.Phases);
+          setPhases(res?.Phases);
           setMembers([]);
-          formik.setFieldValue("phase_id", "");
+          if (!state) {
+            formik.setFieldValue("phase_id", "");
+          }
         })
         .catch((err) => {
           error(err);
@@ -153,8 +156,8 @@ const Create_task = () => {
 
   useEffect(() => {
     if (!!formik?.values?.phase_id) {
-      Axios.get(`ProjectPhases/${formik?.values?.phase_id}`).then((res) => {
-        setMembers(res?.data?.data?.Employees);
+      getData(`ProjectPhases/${formik?.values?.phase_id}`).then((res) => {
+        setMembers(res?.Employees);
 
         //  setPhases(res?.data?.data?.Phases);
         console.log("res?.data?.data");
@@ -231,25 +234,28 @@ const Create_task = () => {
   const handleSubmit = async () => {
     console.log(formik.values);
 
-    const { testcase, usecase, ...formData } = formik.values;
-
-    await Axios({
-      method: "post",
-      url: `/Phases/tasks`,
-      data: formData,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-      .then(function (response) {
-        console.log(response);
+    // const { testcase, usecase, ...formData } = formik.values;
+    if (!state) {
+      await postData([`/Phases/tasks`, formik.values]).then(function () {
         setLoader(false);
         notify("Task Added successfully");
         navigate("/Tasks List");
-      })
-      .catch(function (response) {
-        console.log(response);
-        setLoader(false);
-        error(response.response.data.message);
       });
+    } else {
+      await postData([`/Phases/tasks/${state.id}`, formik.values]).then(
+        function () {
+          setLoader(false);
+          notify("Task Updated successfully");
+          navigate("/Tasks List");
+        }
+      );
+    }
+
+    // .catch(function (response) {
+    //   console.log(response);
+    //   setLoader(false);
+    //   error(response.response.data.message);
+    // });
   };
 
   let addAttach = ({ target: { files } }) => {
@@ -276,11 +282,7 @@ const Create_task = () => {
     <>
       <Location
         main="Technology"
-        head={
-          location.state
-            ? `Edit Task ${location.state.title}`
-            : " Assign New Task"
-        }
+        head={state ? `Edit Task ${state.title}` : " Assign New Task"}
       />
 
       <div className="dash__form">
@@ -292,9 +294,7 @@ const Create_task = () => {
           <div className="dash__form-header">
             <img src={case1} alt="case" />
             <p style={{ color: "#fff" }}>
-              {location.state
-                ? `Edit Task ${location.state.title}`
-                : "Create Task"}
+              {state ? `Edit Task ${state.title}` : "Create Task"}
             </p>
           </div>
           <div className="dash__form-content px-6">
@@ -326,6 +326,7 @@ const Create_task = () => {
                     formik.touched.project_id && formik.errors.project_id
                   }
                   onBlur={formik.handleBlur}
+                  selectedOpt={state?.project?.id}
                 />
               </div>
 
@@ -333,11 +334,12 @@ const Create_task = () => {
                 <Selectinput
                   name="phase_id"
                   fun={handleSelect}
-                  value={formik.values.phase_name}
+                  // value={formik.values.phase_name}
                   header="Project Phase"
                   isInvalid={formik.touched.phase_id && formik.errors.phase_id}
                   onBlur={formik.handleBlur}
                   data={phases}
+                  selectedOpt={state?.phase_id}
                 />
               </div>
 
@@ -365,7 +367,7 @@ const Create_task = () => {
               </div>
 
               <div>
-                <p>Priority</p>
+                {/* <p>Priority</p>
                 <Select
                   name="priority"
                   onChange={formik.handleChange}
@@ -383,7 +385,20 @@ const Create_task = () => {
                 </Select>
                 <span className="error">
                   {formik.touched.priority && formik.errors.priority}
-                </span>
+                </span> */}
+                <Selectinput
+                  header="Priority"
+                  name="priority"
+                  fun={formik.handleChange}
+                  data={[
+                    { id: 0, name: "high" },
+                    { id: 1, name: "low" },
+                    { id: 2, name: "medium" },
+                  ]}
+                  isInvalid={formik.touched.priority && formik.errors.priority}
+                  onBlur={formik.handleBlur}
+                  selectedOpt={0}
+                />
               </div>
               <div>
                 <p>Start Date</p>
@@ -415,7 +430,7 @@ const Create_task = () => {
                 </span>
               </div>
 
-              <div>
+              {/* <div>
                 <Selectinput
                   header="Department"
                   name="department"
@@ -426,7 +441,7 @@ const Create_task = () => {
                   }
                   onBlur={formik.handleBlur}
                 />
-              </div>
+              </div> */}
               <div>
                 <Selectinput
                   header="Member"
@@ -437,6 +452,7 @@ const Create_task = () => {
                     formik.touched.employee_id && formik.errors.employee_id
                   }
                   onBlur={formik.handleBlur}
+                  selectedOpt={state?.employee?.id}
                 />
               </div>
               <div>
@@ -470,12 +486,12 @@ const Create_task = () => {
                   </span>
                 </div>
               </div>
-              {links[0] && (
+              {formik?.values?.links[0] && (
                 <div
-                  className="dash__form-content_links col-span-3"
+                  className="dash__form-content_links col-span-4 grid grid-cols-4"
                   style={{ width: "100%" }}
                 >
-                  {links.map((link, index1) => {
+                  {formik?.values?.links.map((link, index1) => {
                     return (
                       <div className="dash__form-content_links-link">
                         <div className="dash__form-content_links-link-a">
@@ -527,7 +543,7 @@ const Create_task = () => {
           <div className="dash__form-header">
             <img src={case1} alt="case" />
             <p style={{ color: "#fff" }}>
-              {location.state ? `Edit Task ${location.state.title}` : "Testing"}
+              {state ? `Edit Task ${state.title}` : "Testing"}
             </p>
           </div>
           <div className="dash__form-content px-6">
@@ -594,8 +610,8 @@ const Create_task = () => {
               {Object.keys(testObj).map((usecase) => {
                 return (
                   <>
-                    <div className="w-fit min-w-10 p-2 flex justify-center items-center  mt-8 border-blue-500 border-2 rounded-2xl relative usecase">
-                      <h2 className="text-lg">{usecase}</h2>
+                    <div className="w-full min-w-10 p-2 flex justify-center items-center  mt-8 border-blue-500 border-2 rounded-2xl relative  ">
+                      <h2 className="text-lg w-full">{usecase}</h2>
                       <div
                         className="absolute bg-blue-500 w-full h-full  justify-center items-center rounded-2xl hidden"
                         onClick={() => {
@@ -612,31 +628,20 @@ const Create_task = () => {
                     {testObj[usecase].map((test, index1) => {
                       return (
                         <div className="w-full  bg-blue-50 flex justify-start items-center  my-4 rounded-2xl">
-                          {/* <p className=" w-full text-xl text-nowrap  text-ellipsis overflow-hidden">
-                            {test}
-                          </p> */}
                           <Accordion allowToggle className="w-full rounded-2xl">
-                            <AccordionItem className="rounded-2xl ">
-                              <h2>
-                                <AccordionButton>
-                                  <Box as="span" flex="1" textAlign="left">
-                                    {test}
-                                  </Box>
-                                  <AccordionIcon />
-                                </AccordionButton>
-                              </h2>
-                              <AccordionPanel pb={4}>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat.
-                              </AccordionPanel>
+                            <AccordionItem className="rounded-2xl w-full ">
+                              <Box
+                                as="span"
+                                flex="1"
+                                textAlign="left"
+                                className="h-full w-full"
+                              >
+                                <h2 className="w-full h-full p-6">{test}</h2>
+                              </Box>
                             </AccordionItem>
                           </Accordion>
                           <div
-                            className="dash__form-content_links-link-icon"
+                            className="dash__form-content_links-link-icon w-15 h-15"
                             onClick={() => {
                               setTestObj({
                                 ...testObj,
@@ -747,14 +752,14 @@ const Create_task = () => {
         </form>
 
         <div className="dash__form-confirm">
-          <Link
+          <input
             onClick={() => {
               submitBtn.current.click();
             }}
-          >
-            create
-          </Link>
-          <Link>back</Link>
+            value={state ? "Edit" : "Create"}
+          />
+
+          {/* <Link>back</Link> */}
         </div>
       </div>
     </>

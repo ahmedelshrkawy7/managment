@@ -103,10 +103,7 @@ const CreateTechnology = () => {
   };
   const fetchPost = async () => {
     try {
-      await 
-    
-      getData(`/subdepartments`)
-      .then((res) => {
+      await getData(`/subdepartments`).then((res) => {
         setOptions(res?.Subdepartments);
       });
     } catch (err) {
@@ -117,6 +114,7 @@ const CreateTechnology = () => {
   useEffect(() => {
     fetchPost();
     if (location.state) {
+      formik.setFieldValue("_method", "PUT");
       linkinput.current.value = location.state.name;
       // selected.current.value  =  location.state.specialization ;
 

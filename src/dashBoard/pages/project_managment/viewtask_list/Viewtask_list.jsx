@@ -19,14 +19,11 @@ const Viewtask_list = () => {
   const { setLoader } = useContext(LoadContext);
 
   const [projects, setProjects] = useState([]);
-  const {getData,deleteData} = useAxios()
+  const { getData, deleteData } = useAxios();
 
   const fetchPost = async () => {
     try {
-      await
-    
-      getData(`/tasks`)
-      .then((response) => {
+      await getData(`/tasks`).then((response) => {
         setProjects(response?.tasks);
         setLoader(false);
       });
@@ -45,9 +42,7 @@ const Viewtask_list = () => {
   const navigate = useNavigate();
 
   const handleDelete = async (id) => {
-    await
-  
-    deleteData(`Phases/tasks/${id}`)
+    await deleteData(`Phases/tasks/${id}`)
       .then(() => {
         setProjects(
           projects.filter((project, index) => {
@@ -83,7 +78,7 @@ const Viewtask_list = () => {
               return (
                 <tr className="project_table-body">
                   <td>{project.title} </td>
-                  <td>{project["project name"]}</td>
+                  <td>{project.project["title"]}</td>
                   <td>{project.phase_name}</td>
                   <td>
                     <Label text={project.status} />{" "}

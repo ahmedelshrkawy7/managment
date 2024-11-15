@@ -18,7 +18,8 @@ import LoadContext from "../../../components/loader/LoaderContext";
 
 const CreateMember = () => {
   const { setLoader } = useContext(LoadContext);
-  const location = useLocation();
+  const { state } = useLocation();
+  console.log("🚀 ~ CreateMember ~ state:", state);
   const [phone, setPhone] = useState([]);
   const [technology, setTechnology] = useState([]);
   const [selecttechnology, setSelectTechnology] = useState([]);
@@ -89,21 +90,21 @@ const CreateMember = () => {
 
   const formik = useFormik({
     initialValues: {
-      first_name: location?.state?.first_name || "",
-      last_name: location?.state?.last_name || "",
-      experience: location?.state?.experience || "",
-      gender_id: location?.state?.gender_id || "",
-      government_id: location?.state?.government_id || "",
-      position_id: "",
+      first_name: state?.first_name || "",
+      last_name: state?.last_name || "",
+      experience: state?.experience_date || "",
+      gender_id: state?.gender?.id || "",
+      government_id: state?.governorate?.id || "",
+      position_id: state?.governorate?.id,
       image: "",
-      WorkType_id: "",
-      email: location?.state?.email || "",
-      mobile: location?.state?.mobile || [],
-      workhours: location?.state?.workhours || "",
-      salary: location?.state?.salary || "",
-      currency_id: "",
-      address: location?.state?.address || "",
-      role_id: "",
+      WorkType_id: state?.workType?.id,
+      email: state?.email || "",
+      mobile: state?.mobile || [],
+      workhours: state?.workhours || "",
+      salary: state?.salary || "",
+      currency_id: state?.currency?.id,
+      address: state?.address || "",
+      role_id: state?.role_id,
       password: "",
       technologies: [],
       departments: [],
@@ -113,6 +114,7 @@ const CreateMember = () => {
 
     onSubmit: (values) => {
       setLoader(true);
+
       handleSubmit();
       // navigate('/projects/projectlist')
     },
@@ -168,6 +170,29 @@ const CreateMember = () => {
   useEffect(() => {
     fetchPost();
     setlogoImages(location?.state?.image);
+
+    if (state) {
+      formik.setFieldValue("_method", "PUT");
+      let depId = state.departments.map((el) => {
+        setSelectedDep((prev) => [...prev, el.title]);
+        return el.id;
+      });
+
+      formik.setFieldValue("departments", depId);
+
+      let subId = state.subdepartments.map((el) => {
+        setSelectedSpec((prev) => [...prev, el.title]);
+        return el.id;
+      });
+
+      formik.setFieldValue("subdepartments", subId);
+      let techId = state.technologies.map((el) => {
+        setTechnology((prev) => [...prev, el.name]);
+        return el.id;
+      });
+
+      formik.setFieldValue("technologies", techId);
+    }
   }, []);
 
   const fetchPost = async () => {
@@ -204,7 +229,6 @@ const CreateMember = () => {
         { Subdepartments },
         { Roles },
       ] = responses;
-      console.log("🚀 ~ fetchPost ~ responses:", responses);
 
       setPositions(Positions);
       setWorktype(Types);
@@ -333,41 +357,39 @@ const CreateMember = () => {
   };
 
   const handleSubmit = async () => {
-    await // Axios({
-    //   method: "post",
-    //   url: ,
-    //   data: formik.values,
-    // })
-    postData([`/employees`, formik.values]).then(function () {
-      notify("Member created successfully");
-      setLoader(false);
-      navigate("/teamlist");
-    });
-    // .catch(function (response) {
-    //   error(response.response.data.message);
-    //   setLoader(false);
-    // });
+    if (!state) {
+      await postData([`/employees`, formik.values]).then(function () {
+        notify("Member created successfully");
+        setLoader(false);
+        navigate("/teamlist");
+      });
+    } else {
+      await postData([`/employees/${state.id}`, formik.values]).then(
+        function () {
+          notify("Member updated successfully");
+          setLoader(false);
+          navigate("/teamlist");
+        }
+      );
+    }
   };
 
   return (
     <>
-      <Location
-        head={location.state ? "Edit Employee" : " Add Employee"}
-        main="Teams"
-      />
+      <Location head={state ? "Edit Employee" : " Add Employee"} main="Teams" />
       <div className="dash__form">
         <div className="dash__form-header">
           <img src={case1} alt="case" />
           <p style={{ color: "#fff" }}>
-            {location.state
-              ? `Edit ${location.state.first_name} ${location.state.last_name}`
+            {state
+              ? `Edit ${state.first_name} ${state.last_name}`
               : " Create New Member"}
           </p>
         </div>
         <form onSubmit={formik.handleSubmit} className="sm:flex-col">
           <div className="dash__form-logo">
             <div className="dash__form-logo-img">
-              <img src={logoImage ? logoImage : logo1} alt="logo" />
+              <img src={logoImage || state?.image || logo1} alt="logo" />
             </div>
             <div
               className="flex"
@@ -546,7 +568,12 @@ const CreateMember = () => {
                   </option>
                   {positions?.map((position) => {
                     return (
-                      <option value={position.id}>{position.title}</option>
+                      <option
+                        selected={state?.position == position.title}
+                        value={position.id}
+                      >
+                        {position.title}
+                      </option>
                     );
                   })}
                 </Select>
@@ -611,7 +638,12 @@ const CreateMember = () => {
 
                   {currencies?.map((currency) => {
                     return (
-                      <option value={currency.id}>{currency.currency}</option>
+                      <option
+                        selected={state?.currency?.id == currency.id}
+                        value={currency.id}
+                      >
+                        {currency.currency}
+                      </option>
                     );
                   })}
                 </Select>
@@ -634,7 +666,14 @@ const CreateMember = () => {
                     - Select Work type --
                   </option>
                   {worktype?.map((w) => {
-                    return <option value={w.id}>{w.type}</option>;
+                    return (
+                      <option
+                        selected={state?.worktype?.id === w.id}
+                        value={w.id}
+                      >
+                        {w.type}
+                      </option>
+                    );
                   })}
                 </Select>
                 <span className="error">
@@ -653,6 +692,7 @@ const CreateMember = () => {
                   isInvalid={
                     formik.touched.government_id && formik.errors.government_id
                   }
+                  selectedOpt={state?.governorate.id}
                 />
               </div>
 
@@ -668,7 +708,11 @@ const CreateMember = () => {
                     - Select role --
                   </option>
                   {roles?.map((el) => {
-                    return <option value={el.id}>{el.name}</option>;
+                    return (
+                      <option selected={state?.role == el.name} value={el.id}>
+                        {el.name}
+                      </option>
+                    );
                   })}
                 </Select>
                 <span className="error">
@@ -691,7 +735,11 @@ const CreateMember = () => {
                     - Select Gender --
                   </option>
                   {gender?.map((g) => {
-                    return <option value={g.id}>{g.gender}</option>;
+                    return (
+                      <option selected={state?.gender?.id == g.id} value={g.id}>
+                        {g.gender}
+                      </option>
+                    );
                   })}
                 </Select>
                 <span className="error">
@@ -722,7 +770,7 @@ const CreateMember = () => {
                   value={formik.values.password}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
-                  placeholder="Address"
+                  placeholder="password"
                   isInvalid={formik.touched.password && formik.errors.password}
                 />
                 <span className="error">
@@ -921,13 +969,13 @@ const CreateMember = () => {
         </form>
 
         <div className="dash__form-confirm">
-          <Link
+          <input
             onClick={() => {
               submitBtn.current.click();
             }}
-          >
-            create
-          </Link>
+            value={state ? "Edit" : "Create"}
+          />
+
           <Link to="/teamlist">back</Link>
         </div>
       </div>

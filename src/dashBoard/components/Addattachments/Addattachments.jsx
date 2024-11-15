@@ -17,13 +17,14 @@ import p from "../../assets/Form/svgexport-10 (18) 1.svg";
 import rar from "../../assets/Form/svgexport-6 (2) 1.svg";
 import { IoCloseSharp } from "react-icons/io5";
 
-const Addattachments = ({ fun, prevFiles }) => {
-  console.log("🚀 ~ prevFiles:", prevFiles)
+const Addattachments = ({ fun, prevFiles, deleteFiles }) => {
   let [links, setLinks] = useState([]);
   let [technology, setTechnology] = useState([]);
   let [images, setImages] = useState([]);
   let [docs, setDocs] = useState([]);
+  console.log("🚀 ~ docs:", docs);
   let [docfiles, setDocfiles] = useState([]);
+  console.log("🚀 ~ docfiles:", docfiles);
   let [Attachments, setAttachments] = useState([]);
   let [allattachments, setAllattachments] = useState([]);
   let [technologies, setTechnologies] = useState([]);
@@ -33,8 +34,6 @@ const Addattachments = ({ fun, prevFiles }) => {
 
   const prevAttach = (att) =>
     att?.forEach((i) => {
-      console.log(i);
-
       if (i.mime_type.startsWith("image/")) {
         setImages((prev) => [...prev, i.attachment_path]);
         // setAttachments((prev) => [...prev, i]);
@@ -50,9 +49,6 @@ const Addattachments = ({ fun, prevFiles }) => {
       }
     });
   useEffect(() => {
-
-
-    
     return () => {
       prevAttach(prevFiles);
     };
@@ -66,7 +62,7 @@ const Addattachments = ({ fun, prevFiles }) => {
     fun(allattachments);
   }, [allattachments]);
 
-  let remove = (index1, inputName) => {
+  let remove = (index1, inputName, id) => {
     switch (inputName) {
       case "link":
         setLinks(
@@ -94,6 +90,8 @@ const Addattachments = ({ fun, prevFiles }) => {
           })
         );
 
+        deleteFiles(id);
+
         break;
       case "docs":
         setDocs((prev) =>
@@ -106,6 +104,7 @@ const Addattachments = ({ fun, prevFiles }) => {
             return index1 !== idx;
           })
         );
+        deleteFiles(id);
 
         break;
     }
@@ -117,7 +116,6 @@ const Addattachments = ({ fun, prevFiles }) => {
         setImages((prev) => [...prev, URL.createObjectURL(i)]);
         setAttachments((prev) => [...prev, i]);
       } else if (i.type.endsWith("pdf")) {
-        console.log(i);
         setDocs((prev) => [...prev, { name: i.name, img: p, type: "pdf" }]);
         setDocfiles((prev) => [...prev, i]);
       } else if (i.type.endsWith("document")) {
@@ -130,25 +128,27 @@ const Addattachments = ({ fun, prevFiles }) => {
     }
   };
 
-  let removeAttach = (index2) => {
-    setImages(
-      images.filter((word, index) => {
-        return index2 !== index;
-      })
-    );
-    setAttachments(
-      Attachments.filter((attach, index) => {
-        return index2 !== index;
-      })
-    );
-  };
+  // let removeAttach = (index2) => {
+  //   setImages(
+  //     images.filter((word, index) => {
+  //       return index2 !== index;
+  //     })
+  //   );
+  //   setAttachments(
+  //     Attachments.filter((attach, index) => {
+  //       return index2 !== index;
+  //     })
+  //   );
+
+  //   // setDeleted([...deleted,index2])
+  // };
 
   const imgFun = (type) => {
     switch (type) {
       case "application/pdf":
         return [p, "pdf"];
-      case ("application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "text/plain"):
+      case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      case "text/plain":
         return [word, "word"];
       case "application/x-zip-compressed" || "application/x-msdownload":
         return [rar, "rar"];
@@ -219,7 +219,7 @@ const Addattachments = ({ fun, prevFiles }) => {
                     src={trash}
                     alt="trash"
                     onClick={() => {
-                      removeAttach(index);
+                      remove(index, "images", word.id);
                     }}
                   />
                 </div>
@@ -252,14 +252,13 @@ const Addattachments = ({ fun, prevFiles }) => {
 
           <div className="dash__form-content_attach-documents">
             {docfiles?.map((doc, index) => {
+              const [img, type] = imgFun(doc.type);
               return (
                 <div className="dash__form-content_attach-documents_doc">
-                  <img src={imgFun(doc.type)[0]} alt="pdf" />
+                  <img src={img} alt="pdf" />
                   <h4>{doc.name}</h4>
                   <div className="flex-col ">
-                    <p style={{ justifySelf: "flex-end" }}>
-                      {imgFun(doc.type)[1]}
-                    </p>
+                    <p style={{ justifySelf: "flex-end" }}>{type}</p>
                     <p className="font-bold">{Math.ceil(doc.size / 1000)}KB</p>
                   </div>
                   <IoIosClose
@@ -267,7 +266,7 @@ const Addattachments = ({ fun, prevFiles }) => {
                     size={24}
                     style={{ cursor: "pointer" }}
                     onClick={() => {
-                      remove(index, "docs");
+                      remove(index, "docs", doc.id);
                     }}
                   />
                 </div>

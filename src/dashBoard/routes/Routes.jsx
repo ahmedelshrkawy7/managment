@@ -47,35 +47,10 @@ import {
   Editproject,
   Employeeview,
   CreateService,
+  Editsub,
 } from "./import";
 
 const Routesfile = () => {
-  const { Auth } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const logged = JSON.parse(localStorage.getItem("logged"));
-
-  useEffect(() => {
-    if (!logged) {
-      if (location.pathname === "/login/forget") {
-        return;
-      } else if (location.pathname === "/login/forget/otp") {
-        return;
-      } else {
-        navigate("/login");
-      }
-    } else if (logged) {
-      if (location.pathname === "/login") {
-        navigate("/");
-      }
-    }
-  }, [location.pathname]);
-
-  // if( Auth && location.pathname === ("/login")){
-  //       navigate("/")
-  // }
-
   return (
     <Routes>
       <Route path="/login" element={<Outlet />}>
@@ -113,6 +88,7 @@ const Routesfile = () => {
 
         <Route path="/createsub" element={<CreateSub />} />
         <Route path="/sublist" element={<SpecialList />} />
+        <Route path="/editsub" element={<Editsub />} />
         <Route path="/Carddetails" element={<Carddetails />} />
 
         {/* ----------------------  specialization -------------------- */}

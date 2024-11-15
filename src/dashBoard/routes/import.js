@@ -2,6 +2,7 @@ import Location from "../includes/location/Location";
 import Department from "../pages/fields/department/Department";
 import Createfield from "../pages/fields/createField/Createfield";
 import CreateSub from "../pages/fields/subDepartment/CreateSub";
+import Editsub from "../pages/fields/subDepartment/Editsub";
 import Allfields from "../pages/fields/allFields/Allfields";
 import CreateTechnology from "../pages/fields/technology/CreateTechnology";
 import SpecialList from "../pages/fields/specialization/Special-list";
@@ -79,4 +80,5 @@ export {
   Editproject,
   Employeeview,
   CreateService,
+  Editsub,
 };

@@ -7,19 +7,20 @@ import icon3 from "../../assets/home/task-square.svg";
 import icon4 from "../../assets/home/user.svg";
 import Home_card from "../../components/home_card/Home_card";
 import "./Home.css";
-import AuthContext from "../../Auth/AuthProvider";
 import useAxios from "../../api/Axios";
 import Header from "../../components/Header/Header";
 import { error } from "../../notifications/Toast";
+import { useQuery } from "@tanstack/react-query";
 
 const Home = () => {
   const [projects_count, setProjects_count] = useState([]);
-  console.log("🚀 ~ Home ~ projects_count:", projects_count);
   const [projects, setProjects] = useState([]);
   const { getData } = useAxios();
 
-  const { Auth } = useContext(AuthContext);
-  console.log("🚀 ~ Home ~ Auth:", Auth.user.token);
+  const { isPending, error, data } = useQuery({
+    queryKey: ["projects"],
+    queryFn: () => getData("/projects"),
+  });
 
   const fetchPost = async () => {
     const endpoints = ["projects", "dashboard"];
@@ -43,8 +44,6 @@ const Home = () => {
     if (JSON.parse(localStorage.getItem("token"))) {
       fetchPost();
     }
-
-    // webSocket("http://localhost:8000");
   }, []);
 
   return (

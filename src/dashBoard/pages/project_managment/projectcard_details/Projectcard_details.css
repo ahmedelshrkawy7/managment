@@ -83,7 +83,7 @@
     height: 200px;
     border-radius: 200px;
     border: 3px solid var(--1, #4F9CD1);
-    object-fit: cover;
+    object-fit: contain;
     background:  lightgray 50% / cover no-repeat, var(--5, rgba(79, 156, 209, 0.10));
 
 }
@@ -115,3 +115,13 @@
     align-items: center;
     color: #292D32;
 }
+.phaseedit{
+    top: -60%;
+    height: 50% !important;
+    width: 100%;
+    display: none !important;
+
+}
+.dashboard_allfields_toggle .active .phaseedit{
+    display: flex !important;
+} 

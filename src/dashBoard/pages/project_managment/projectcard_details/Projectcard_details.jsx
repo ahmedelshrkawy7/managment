@@ -9,28 +9,25 @@ import Table_member from "../../../includes/table_member/Table_member";
 import View_attachments from "../../../components/view_attachments/View_attachments";
 import useAxios from "../../../api/Axios";
 import LoadContext from "../../../components/loader/LoaderContext";
+import pen from "../../../assets/project/edit-2.svg";
+import trash from "../../../assets/project/trash.svg";
 
 const Projectcard_details = () => {
   const { projectid } = useParams();
   const { setLoader } = useContext(LoadContext);
 
-  const {getData,pstDate}= useAxios()
+  const { getData, deleteData } = useAxios();
   const [table_data, setTable_data] = useState([]);
   const [project, setProject] = useState([]);
-  const [fetch, setFetch] = useState([]);
+  const [projectphase, setProjectphase] = useState([]);
   const [phase_index, setPhase_index] = useState();
   const [phase_id, setPhase_id] = useState();
   const [active, setActive] = useState([1]);
-
-
-
+  const navigate = useNavigate();
 
   const fetchPost = async () => {
     try {
-      await
-     
-      getData(`/projects`)
-      .then((res) => {
+      await getData(`/projects`).then((res) => {
         setTable_data(res?.allprojects);
       });
     } catch (err) {
@@ -39,16 +36,20 @@ const Projectcard_details = () => {
   };
   const fetchhead = async () => {
     try {
-      await 
-     
-      getData( `/projects/${projectid}`)
-      .then((res) => {
+      await getData(`/projects/${projectid}`).then((res) => {
         setProject(res?.project);
+        setProjectphase(res.project.phases);
         setLoader(false);
       });
     } catch (err) {
       setLoader(false);
     }
+  };
+
+  const handleDelete = (id) => {
+    deleteData(`/ProjectPhases/${id}`);
+    setProjectphase((prev) => prev.filter((el) => el.id !== id));
+    setPhase_index();
   };
 
   useEffect(() => {
@@ -57,13 +58,10 @@ const Projectcard_details = () => {
     setLoader(true);
   }, []);
 
- 
-
   var options = {
     show: true,
     series: [Math.floor(project?.progress)],
     chart: {
-      
       type: "radialBar",
       padding: 0,
       margin: 0,
@@ -193,32 +191,60 @@ const Projectcard_details = () => {
       </div>
 
       <div className=" dash__form">
-        <div className="dashboard_allfields_toggle">
-          {project?.phases?.map((sub, index) => {
+        <div className="dashboard_allfields_toggle gap-4">
+          {projectphase?.map((sub, index) => {
             return (
-              <div
-                className={`${active[index] && "active"}`}
-                key={sub.id}
-                onClick={() => {
-                  setPhase_index(index);
-                  setPhase_id(sub.id);
-                  setActive(() => {
-                    let arr = [];
-                    arr[index] = 1;
-                    return arr;
-                  });
-                }}
-              >
-                <h5>{sub.title}</h5>
-              </div>
+              <>
+                <div
+                  className={`relative rounded-none	 ${
+                    active[index] && "active"
+                  }`}
+                  key={sub.id}
+                  onClick={() => {
+                    setPhase_index(index);
+                    setPhase_id(sub.id);
+                    setActive(() => {
+                      let arr = [];
+                      arr[index] = 1;
+                      return arr;
+                    });
+                  }}
+                >
+                  <h5>{sub.title}</h5>
+                  <div
+                    className="absolute phaseedit border-b-0  w-full justify-center gap-4 hidden 	"
+                    style={{ flexDirection: "row" }}
+                  >
+                    <img
+                      src={pen}
+                      alt="person"
+                      onClick={() => {
+                        navigate(
+                          `/projects/Phase/${project.id}?project=${project.title}&phaseid=${sub.id}`,
+                          {
+                            state: { projectphase },
+                          }
+                        );
+                      }}
+                    />
+                    <img
+                      src={trash}
+                      alt="person"
+                      onClick={() => {
+                        handleDelete(sub.id);
+                      }}
+                    />
+                  </div>
+                </div>
+              </>
             );
           })}
         </div>
 
-        {phase_index !== undefined ? (
+        {projectphase[phase_index] != undefined ? (
           <form style={{ flexDirection: "column" }}>
             <h2 style={{ fontSize: "24px" }}>
-              {project?.phases[phase_index]?.description}
+              {projectphase[phase_index]?.description}
             </h2>
 
             <div
@@ -232,17 +258,15 @@ const Projectcard_details = () => {
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span style={{ background: "#1370E4" }} />{" "}
                 <h2> Deadline &nbsp; : &nbsp; </h2>{" "}
-                <p>
-                  {project?.phases ? project?.phases[phase_index]?.end : ""}{" "}
-                </p>
+                <p>{projectphase ? projectphase[phase_index]?.end : ""} </p>
               </div>
               <div style={{ display: "flex", alignItems: "center" }}>
                 <span style={{ background: "#1370E4" }} />{" "}
                 <h2> Progress &nbsp; : &nbsp; </h2>{" "}
                 <p>
                   {" "}
-                  {project?.phases
-                    ? Math.floor(project?.phases[phase_index]?.progress)
+                  {projectphase
+                    ? Math.floor(projectphase[phase_index]?.progress)
                     : ""}
                   &nbsp;%
                 </p>
@@ -252,8 +276,8 @@ const Projectcard_details = () => {
                 <h2> No.of Members &nbsp; : &nbsp; </h2>{" "}
                 <p>
                   {" "}
-                  {project?.phases
-                    ? project?.phases[phase_index]?.employee_count
+                  {projectphase
+                    ? projectphase[phase_index]?.employee_count
                     : ""}
                 </p>
               </div>
@@ -271,122 +295,10 @@ const Projectcard_details = () => {
               trash_route="/projects/Phase"
             />
 
-            {/*         
-          <div className='dash__viewtask-attachments'>
-                    <h2 className="head">URL :</h2>
-                  
-                        
-                        <div  className='dash__viewtask-attachments_content'>
-                            <div>
-                              <div className='attach-head'>
-                                <img src={attach} alt=''/>
-                                <h3 >Document Links</h3>
-                              </div>
-                              <div className='dash__form-content_links'>
-                                
-                                { project.links?
-                                        project?.links?.map((link)=>{
-                                            return(
-                                                <div className='dash__form-content_links-view'>
-                                                    <h3>{link}</h3>
-                                                </div>
-                                            )
-                                        })
-                                        :<p>no links</p>
-                                    }
-                            
-
-                              
-                                  
-                                  
-                              </div>
-                            </div>
-
-
-                            <div>
-                                <div className='attach-head'>
-                                    <img src={attach} alt=''/>
-                                    <h3 >Attachments</h3>
-                                </div>
-                              
-                                <div className='dash__form-content_attach_upload flex' style={{gap:'25px', flexWrap:'wrap', justifyContent:'flex-start'}} >
-
-                                    
-                                    
-            
-                                        
-                                            
-                                            {project.attachments? project.attachments.map((attachment)=>{
-
-                                              if( attachment.attachment_type == 'image'){
-
-                                                  return(
-                                                    <div className='dash__form-content_attach_upload-image' key={project.id}>
-          
-                                                    <div className='dash__form-content_attach_upload-image_file'>
-                                                      
-                                                    <img src={attachment.attachment_path} alt='attach img'/>
-                                                    </div>
-
-                                                </div>
-                      
-                                                  )
-                                              }
-                                            }):<p>no attachments</p>}
-            
-                                </div>
-                        
-                            </div>
-                      
-
-                            <div>
-                                <div className='attach-head'>
-                                    <img src={document} alt=''/>
-                                    <h3 > Documents</h3>
-                                </div>
-
-
-                                <div className='attach-files'>
-                                      
-                                {project.attachments?  project?.attachments?.map((attachment)=>{
-
-                                    if( attachment.attachment_type != 'image'){
-
-                                
-
-                                        return(
-
-                                            <div className='attach-file'>
-                                                <div>
-                                                    <img src={pdf} alt='files'/>
-                                                </div>
-                                                <div>
-                                                    <h3>Project Details</h3>
-                                                    <p>20 page . 4,4 MB</p>
-                                                </div>
-                                                <div style={{marginLeft:'auto'}}>
-                                                    <img src={download} alt=''/>
-                                                </div>
-                                                
-                                            </div>
-                                        )
-
-
-                                    }
-                                    }) :<p>no docs</p> }
-                                  
-                                </div>
-                                
-                              
-                            </div>
-                        </div>
-                        
-                    </div> */}
-
             <View_attachments
-              links={project?.phases ? project?.phases[phase_index]?.links : []}
+              links={projectphase ? projectphase[phase_index]?.links : []}
               attachs={
-                project?.phases ? project?.phases[phase_index]?.attachments : []
+                projectphase ? projectphase[phase_index]?.attachments : []
               }
             />
           </form>

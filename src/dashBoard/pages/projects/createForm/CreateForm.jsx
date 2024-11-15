@@ -52,6 +52,7 @@ const CreateForm = () => {
       logo: "",
       links: location?.state?.links || [],
       technologies: [],
+      is_deleted: [],
     },
     validationSchema: validationSchema,
     validateOnChange: true,
@@ -66,7 +67,6 @@ const CreateForm = () => {
       }
     },
   });
-  console.log(formik.values);
 
   let [links, setLinks] = useState([]);
   let [technology, setTechnology] = useState([]);
@@ -87,6 +87,7 @@ const CreateForm = () => {
       console.error(err);
     }
   };
+  console.log(formik.values);
 
   useEffect(() => {
     fetchPost();
@@ -95,6 +96,9 @@ const CreateForm = () => {
 
   const updateData = (Allattachments) => {
     formik.setFieldValue("attachments", Allattachments);
+  };
+  const deleteFiles = (id) => {
+    formik.setFieldValue("is_deleted", [...formik.values.is_deleted, id]);
   };
 
   let push = (str, inputName) => {
@@ -318,7 +322,7 @@ const CreateForm = () => {
                   onBlur={formik.handleBlur}
                   isInvalid={formik.touched.type && formik.errors.type}
                 >
-                  <option selcted hidden>
+                  <option selected hidden>
                     -- select type --
                   </option>
                   <option>Product</option>
@@ -389,71 +393,11 @@ const CreateForm = () => {
                 options={technologies}
                 oldValues={location?.state?.technologies_names}
               />
-
-              {/* <div>
-                <p>Technologies</p>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "flex-start",
-                    gap: "20px",
-                    alignItems: "center",
-                  }}
-                >
-                  <Select type="url" name="technologies" ref={techinput} onBlur={formik.handleBlur} onChange={(e)=>{
-                     push(e.target.value, "tech");
-                     formik.setFieldValue("technologies", [
-                       ...formik.values.technologies,
-                       e.target.childNodes[e.target.selectedIndex].getAttribute("name")
-                     ]);
-                  }}
-                   isInvalid={formik.touched.technologies && formik.errors.technologies}
-                  >
-                    <option selected hidden value="">
-                      - select technology -
-                    </option>
-                    {technologies?.map((tech) => {
-                      return (
-                        <>
-                          <option name={tech.id}>{tech.name}</option>
-                        </>
-                      );
-                    })}
-                  </Select>
-                  <span className="error">{formik.touched.technologies && formik.errors.technologies}</span>
-
-                 
-                </div>
-              </div>
-              {technology[0] && (
-                <div
-                  className="col-span-4 md:col-span-2 sm:col-span-1 gap-4 dash__form-content_links"
-                  style={{ width: "100%" }}
-                >
-                  {technology.map((tech, index1) => {
-                    return (
-                      <div className="dash__form-content_links-link">
-                        <div className="dash__form-content_links-link-a">
-                          <a target="blank">{tech}</a>
-                        </div>
-                        <div
-                          className="dash__form-content_links-link-icon"
-                          onClick={() => {
-                            remove(index1, "tech");
-                          }}
-                        >
-                          <img src={bin} alt="bin" />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}*/}
             </div>
 
             <Addattachments
               fun={updateData}
+              deleteFiles={deleteFiles}
               prevFiles={location?.state?.attachments}
             />
 

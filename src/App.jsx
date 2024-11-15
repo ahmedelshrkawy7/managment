@@ -24,7 +24,14 @@ const App = () => {
 
   useEffect(() => {
     if (!Auth) {
-      navigate("/login");
+      // navigate("login");
+      console.log("first Auth");
+    }
+
+    console.log(JSON.parse(localStorage.getItem("Roles")) === "admin");
+
+    if (JSON.parse(localStorage.getItem("Roles")) === "employee") {
+      navigate("/Tasks List");
     }
   }, []);
 

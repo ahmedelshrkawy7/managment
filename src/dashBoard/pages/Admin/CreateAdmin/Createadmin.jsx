@@ -54,7 +54,6 @@ const Createadmin = () => {
       email: "",
       password: "",
       role: "",
-      role_id: "",
       password_confirmation: "",
       //   image:"",
     },
@@ -286,7 +285,7 @@ const Createadmin = () => {
                 >
                   <InputGroup size="lg">
                     <Input
-                      name="password"
+                      name="password_confirmation"
                       type={pwdshow ? "text" : "password"}
                       placeholder="Enter your Password"
                       onChange={formik.handleChange}

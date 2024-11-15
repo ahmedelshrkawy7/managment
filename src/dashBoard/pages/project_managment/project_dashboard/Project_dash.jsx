@@ -15,17 +15,13 @@ const Project_dash = () => {
   const { setLoader } = useContext(LoadContext);
   const [projects_count, setProjects_count] = useState([]);
   const [projects, setProjects] = useState([]);
-  const {getData}= useAxios()
+  const { getData } = useAxios();
 
   // const projectnum = [{ header: "", num: "", icon: "" }];
 
   const fetchPost = async () => {
-   
     try {
-     
-        getData(`/projects`)
-       
-      .then(( res) => {
+      getData(`/projects`).then((res) => {
         setProjects_count(res.project_counts);
         setProjects(res.allprojects);
         setLoader(false);
@@ -68,24 +64,28 @@ const Project_dash = () => {
               projects_count.delayed_projects || "0"
           }
           icon={icon1}
+          nav=""
         />
         <Projectnum_card
           header="Completed "
           num={projects_count.completed_projects}
           footer="Projects"
           icon={icon2}
+          nav=""
         />
         <Projectnum_card
           header="In Progress "
           num={projects_count.in_progress_projects}
           footer="Projects"
           icon={icon3}
+          nav=""
         />
         <Projectnum_card
           header="Delayed "
           num={projects_count.delayed_projects}
           footer="Projects"
           icon={icon4}
+          nav=""
         />
       </div>
 
@@ -93,7 +93,7 @@ const Project_dash = () => {
         <h2>Projects</h2>
       </div>
 
-      <div className="w-full gap-4 grid grid-cols-4   md:grid-cols-2 sm:grid-cols-1 ">
+      <div className="w-full gap-4 grid grid-cols-4 xl:grid-cols-3  lg:grid-cols-2 sm:grid-cols-1 ">
         {projects.map((project) => {
           return (
             <>

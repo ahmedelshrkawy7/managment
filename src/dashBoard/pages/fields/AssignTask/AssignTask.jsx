@@ -75,7 +75,7 @@ const Assigntask = () => {
   //  console.log(data);
 
   const fetchPost = async () => {
-    const endpoints = ["projects", "ProjectPhases", "departments"];
+    const endpoints = ["projects", "departments"];
     try {
       Promise.all(
         endpoints.map((endpoint) =>
@@ -83,9 +83,8 @@ const Assigntask = () => {
             error(err.response.data.message);
           })
         )
-      ).then(([{ allprojects }, { Phases }, { Departments }]) => {
+      ).then(([{ allprojects }, { Departments }]) => {
         setProjects(allprojects);
-        setPhases(Phases);
         setDepartments(Departments);
       });
     } catch (err) {
@@ -97,6 +96,19 @@ const Assigntask = () => {
     fetchPost();
     formik.setFieldValue("employee_id", id);
   }, []);
+
+  useEffect(() => {
+    if (!!formik?.values?.project_id) {
+      getData(`/Phases/${formik.values.project_id}`)
+        .then((res) => {
+          setPhases(res?.Phases);
+          formik.setFieldValue("phase_id", "");
+        })
+        .catch((err) => {
+          error(err);
+        });
+    }
+  }, [formik?.values?.project_id]);
 
   console.log(formik?.values);
 

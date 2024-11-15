@@ -6,6 +6,7 @@ import case1 from "../../../assets/Form/briefcase.svg";
 import useAxios, { Axios } from "../../../api/Axios";
 import {
   Link,
+  useLocation,
   useNavigate,
   useParams,
   useSearchParams,
@@ -31,6 +32,8 @@ const Newphase = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [search] = useSearchParams();
+  const { state } = useLocation();
+  console.log("🚀 ~ state:", state);
 
   let [links, setLinks] = useState([]);
   let [technology, setTechnology] = useState([]);
@@ -40,26 +43,31 @@ const Newphase = () => {
   let [Attachments, setAttachments] = useState([]);
   let [allattachments, setAllattachments] = useState([]);
   let [departments, setDepartments] = useState([]);
+  let [editPhase, setEditphase] = useState([]);
   let [selectedDep, setSelectedDep] = useState([]);
-  let [depIndex, setDepIndex] = useState([1]);
+  // let [depIndex, setDepIndex] = useState([1]);
   let [subdepartments, setSubdepartments] = useState([]);
   let [employees, setEmployees] = useState([]);
   let [obj_view, setObj_view] = useState({});
   let [obj_api, setObj_api] = useState({});
+
+  let [initial, setInitail] = useState({
+    title: "",
+    start: "",
+    end: "",
+    status: "",
+    priority: "",
+    attachments: [],
+    phase_discription: "",
+    target: [],
+    project_teams: [],
+    employee_ids: [],
+  });
+  console.log(initial);
+
   const { getData } = useAxios();
 
   let submitBtn = useRef(0);
-
-  let [data, setData] = useState({
-    title: "",
-    description: "",
-    status: "On going",
-    start: "",
-    end: "",
-    attachments: [],
-    links: [],
-    project_teams: [],
-  });
 
   const updateData = (Allattachments) => {
     formik.setFieldValue("attachments", Allattachments);
@@ -67,14 +75,6 @@ const Newphase = () => {
 
   const updateArray = (array, name) => {
     formik.setFieldValue(name, array);
-  };
-
-  const handleChange = (e) => {
-    const value = e.target.value;
-    setData({
-      ...data,
-      [e.target.name]: value,
-    });
   };
 
   let index;
@@ -106,8 +106,6 @@ const Newphase = () => {
         });
 
         break;
-      default:
-        break;
 
       case "employee_ids":
         index =
@@ -136,20 +134,22 @@ const Newphase = () => {
     // setObj_api( {[name] : e.target.selctedIndex} );
   };
 
-  // useEffect(()=>{
-
-  //   setData({...data , project_teams:[...data[ 'project_teams'],  obj_api  ]  })
-
-  // },[obj_api['employee_ids']])
-
   const fetchPost = async () => {
     try {
-      await //  Axios({
+      //  Axios({
       //   method: "Get",
       //   url: ,
 
       //  headers: headers, params:data
-      getData(`/departments`).then((res) => {
+      if (state) {
+        await getData(`/ProjectPhases/${search.get("phaseid")}`).then((res) => {
+          setEditphase(res);
+
+          setInitail(res.ProjectPhase);
+        });
+      }
+
+      await getData(`/departments`).then((res) => {
         setDepartments(res?.Departments);
       });
     } catch (err) {
@@ -199,53 +199,53 @@ const Newphase = () => {
     setAllattachments([...Attachments, ...docfiles]);
   }, [Attachments, docfiles]);
 
-  let remove = (index1, inputName) => {
-    switch (inputName) {
-      case "link":
-        setLinks(
-          links.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
-        break;
-      case "tech":
-        setTechnology(
-          technology.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
-        break;
-      case "images":
-        setImages((prev) =>
-          prev.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
-        setAttachments((prev) =>
-          prev.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
+  // let remove = (index1, inputName) => {
+  //   switch (inputName) {
+  //     case "link":
+  //       setLinks(
+  //         links.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
+  //       break;
+  //     case "tech":
+  //       setTechnology(
+  //         technology.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
+  //       break;
+  //     case "images":
+  //       setImages((prev) =>
+  //         prev.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
+  //       setAttachments((prev) =>
+  //         prev.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
 
-        break;
-      case "docs":
-        setDocs((prev) =>
-          prev.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
-        setDocfiles((prev) =>
-          prev.filter((word, idx) => {
-            return index1 !== idx;
-          })
-        );
+  //       break;
+  //     case "docs":
+  //       setDocs((prev) =>
+  //         prev.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
+  //       setDocfiles((prev) =>
+  //         prev.filter((word, idx) => {
+  //           return index1 !== idx;
+  //         })
+  //       );
 
-        break;
+  //       break;
 
-      default:
-        break;
-    }
-  };
+  //     default:
+  //       break;
+  //   }
+  // };
 
   const removeEmployee = (index1, dep) => {
     setObj_view({
@@ -254,10 +254,6 @@ const Newphase = () => {
         return index1 !== idx;
       }),
     });
-    // setObj_api((prev) => prev.filter((word, idx) => {
-    //   return index1 !== idx;
-    // })
-    // );
 
     formik.setFieldValue(
       "project_teams",
@@ -297,25 +293,15 @@ const Newphase = () => {
   });
 
   const formik = useFormik({
-    initialValues: {
-      title: "",
-      start: "",
-      end: "",
-      status: "",
-      priority: "",
-      attachments: [],
-      phase_discription: "",
-      target: [],
-      project_teams: [],
-      employee_ids: [],
-    },
-
+    initialValues: initial,
+    enableReinitialize: true,
     validationSchema: validationSchema,
 
     onSubmit: (values) => {
       handleSubmit();
     },
   });
+  console.log(formik);
 
   return (
     <>
@@ -334,8 +320,7 @@ const Newphase = () => {
                 <Input
                   name="title"
                   type="text"
-                  onChange={formik.handleChange}
-                  onBlur={formik.handleBlur}
+                  {...formik.getFieldProps("title")}
                   placeholder="Phase Name"
                   isInvalid={formik.touched.title && formik.errors.title}
                 />
@@ -349,6 +334,7 @@ const Newphase = () => {
                 <Input
                   name="start"
                   type="date"
+                  value={formik.values.start}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   isInvalid={formik.touched.start && formik.errors.start}
@@ -363,6 +349,7 @@ const Newphase = () => {
                 <Input
                   name="end"
                   type="date"
+                  {...formik.getFieldProps("end")}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   isInvalid={formik.touched.end && formik.errors.end}
@@ -375,6 +362,7 @@ const Newphase = () => {
                 <p>Status</p>
                 <Select
                   name="status"
+                  {...formik.getFieldProps("status")}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   isInvalid={formik.touched.status && formik.errors.status}
@@ -395,6 +383,7 @@ const Newphase = () => {
                 <p>Priority</p>
                 <Select
                   name="priority"
+                  {...formik.getFieldProps("priority")}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   isInvalid={formik.touched.priority && formik.errors.priority}
@@ -418,6 +407,7 @@ const Newphase = () => {
                 isInvalid={
                   formik.touched.dependencies && formik.errors.dependencies
                 }
+                data={initial.dependencies}
                 onBlur={formik.handleBlur}
               />
             </div>
@@ -431,6 +421,7 @@ const Newphase = () => {
                   rows="4"
                   cols="50"
                   name="phase_discription"
+                  {...formik.getFieldProps("phase_discription")}
                   onChange={formik.handleChange}
                   onBlur={formik.handleBlur}
                   isInvalid={
@@ -456,6 +447,7 @@ const Newphase = () => {
               keyName="links"
               isInvalid={formik.touched.links && formik.errors.links}
               onBlur={formik.handleBlur}
+              data={initial.links}
             />
             <Addinput
               header="Phase Delivrables"
@@ -464,6 +456,7 @@ const Newphase = () => {
               keyName="target"
               isInvalid={formik.touched.target && formik.errors.target}
               onBlur={formik.handleBlur}
+              data={initial.links}
             />
 
             <div className=" grid grid-cols-3 gap-8">

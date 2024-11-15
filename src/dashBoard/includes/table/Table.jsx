@@ -22,11 +22,11 @@ const Table = ({
   const [projects, setProjects] = useState([]);
   const navigate = useNavigate();
   const { setLoader } = useContext(LoadContext);
-  const {getData,deleteData}= useAxios()
+  const { getData, deleteData } = useAxios();
 
   const fetchPost = async () => {
     try {
-      const response =await getData(`/${api}`)
+      const response = await getData(`/${api}`);
       setProjects(response[res_key]);
       setLoader(false);
     } catch (err) {
@@ -41,10 +41,6 @@ const Table = ({
   }, []);
 
   const handleDelete = async (id) => {
-    // await Axios({
-    //   method: "Delete",
-    //   url: ,
-    // })
     await deleteData(`/${api}/${id}`)
       .then(() => {
         setProjects(
@@ -52,7 +48,6 @@ const Table = ({
             return project.id !== id;
           })
         );
-        notify("Deleted successfully");
       })
       .catch((err) => {
         error(err.response.data.message);
@@ -72,7 +67,7 @@ const Table = ({
 
             {projects?.map((project, index) => {
               return (
-                <tr className="project_table-body">
+                <tr className="project_table-body" key={""}>
                   <td style={{ fontWeight: "600" }}>
                     {project["title"]}
                     {project["name"]}

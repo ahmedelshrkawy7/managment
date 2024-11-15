@@ -24,7 +24,7 @@
   height: 55px;
   flex-grow: 1;
   border-radius: 10px 10px 0px 0px;
-  border: 1px solid rgb(225 223 223);
+  /* border: 1px solid rgb(225 223 223); */
   background: #fff;
   padding: 1rem;
   color: var(--blue);

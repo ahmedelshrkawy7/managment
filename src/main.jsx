@@ -12,25 +12,33 @@ import { AuthProvider } from "./dashBoard/Auth/AuthProvider";
 import Toast from "./dashBoard/notifications/Toast";
 import { ChakraProvider } from "@chakra-ui/react";
 import { LoaderProvider } from "./dashBoard/components/loader/LoaderContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-const alexServer = "http://216.219.83.182/Alexon_Management/public/api";
+// const alexServer = "http://216.219.83.182/Alexon_Management/public/api";
 
 export const logged = createContext(null);
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 6 * 1000,
+    },
+  },
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <ChakraProvider>
-      <serverApi.Provider value={alexServer}>
-        <BrowserRouter>
-          <LoaderProvider>
-            <AuthProvider>
-              <Routesfile />
-              <Toast />
-            </AuthProvider>
-          </LoaderProvider>
-        </BrowserRouter>
-      </serverApi.Provider>
-    </ChakraProvider>
-  </React.StrictMode>
+  <ChakraProvider>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <LoaderProvider>
+          <AuthProvider>
+            <Routesfile />
+            <Toast />
+          </AuthProvider>
+        </LoaderProvider>
+      </BrowserRouter>
+      <ReactQueryDevtools />
+    </QueryClientProvider>
+  </ChakraProvider>
 );

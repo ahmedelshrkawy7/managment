@@ -31,7 +31,7 @@ import Tr from "../../../components/Trservice/Tr";
 const CreateService = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const {getData,postData}= useAxios()
+  const { getData, postData } = useAxios();
 
   const linkSchema = Yup.string().url("Invalid URL format");
 
@@ -66,29 +66,33 @@ const CreateService = () => {
   let [body, setBody] = useState({});
   console.log("🚀 ~ CreateService ~ body:", body);
   let [params, setParams] = useState({});
-  console.log("🚀 ~ CreateService ~ params:", params);
+  let [vlaues, setValues] = useState({});
 
   let submitBtn = useRef(0);
   let method = useRef(0);
   let param = useRef(0);
   let paramValue = useRef(0);
 
+  console.log(formik.values);
+
   const fetchPost = async () => {
     setLoader(true);
-    console.log(formik.values);
+
+    let bodyObj = {};
     for (let i = 0; i < Object.entries(body).length; i++) {
       const [key, value] = Object.entries(body)[i];
-      formik.setFieldValue("body", {
-        ...formik.values.body,
-        [value[0]]: value[1],
-      });
+      bodyObj[value[0]] = value[1];
+      // formik.setFieldValue("body", {
+      //   ...formik.values.body,
+      //   [value[0]]: value[1],
+      // });
     }
 
     try {
       await axios({
         method: `${method.current.value}`,
         url: formik.values.link,
-        data: formik.values.body,
+        data: bodyObj,
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${formik.values.token}`,

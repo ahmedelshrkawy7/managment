@@ -12,20 +12,19 @@ const SpecialList = () => {
   const { setLoader } = useContext(LoadContext);
   const th = ["Specialization", "Department Name", "Actions"];
   const attributes = ["Department"];
-  const {getData}= useAxios()
-
+  const { getData } = useAxios();
 
   const [technologies, setTechnologies] = useState([]);
 
   const fetchPost = async () => {
     try {
-      const response = await getData("/technologies")
-    
+      const response = await getData("/technologies");
+
       setTechnologies(response?.AllTechnologies);
       setLoader(false);
     } catch (err) {
       setLoader(false);
-      error(err)
+      error(err);
     }
   };
 
@@ -50,7 +49,7 @@ const SpecialList = () => {
           api="subdepartments"
           res_key="Subdepartments"
           attributes={attributes}
-          edit_route="CreateSub"
+          edit_route="editsub"
           trash_route="true "
         />
 

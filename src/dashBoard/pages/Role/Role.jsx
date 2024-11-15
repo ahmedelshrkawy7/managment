@@ -16,8 +16,7 @@ const Role = () => {
   const [allchecked, setAllchecked] = useState(undefined);
   const navigate = useNavigate();
   const submitBtn = useRef(0);
-  const{getData,postData} =useAxios()
-
+  const { getData, postData } = useAxios();
 
   const validationSchema = Yup.object().shape({
     name: Yup.string("shuold be string").required("required *"),
@@ -28,6 +27,7 @@ const Role = () => {
     initialValues: {
       name: "",
       permissions: [],
+      guard_name: "api",
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
@@ -37,9 +37,7 @@ const Role = () => {
   });
 
   const handleSubmit = async () => {
-    await
-  
-    postData([`/roles`,formik.values])
+    await postData([`/roles`, formik.values])
       .then(function () {
         notify("Role Added successfully");
         setLoader(false);
@@ -53,13 +51,11 @@ const Role = () => {
 
   const fetchPost = async () => {
     try {
-      await
-      //  Axios({
+      await //  Axios({
       //   method: "Get",
       //   url: ,
       // })
-      getData(`/roles`)
-      .then((res) => {
+      getData(`/roles`).then((res) => {
         setRoles(res?.permissions);
       });
     } catch (err) {

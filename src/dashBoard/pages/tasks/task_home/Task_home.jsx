@@ -47,7 +47,6 @@ const Task_home = () => {
 
   const { getData } = useAxios();
 
-
   const togglefun = (id) => {
     setToggle(!toggle);
     setTaskId(id);
@@ -58,13 +57,13 @@ const Task_home = () => {
     try {
       Promise.all(
         endpoints.map((endpoint) =>
-         getData(`/${endpoint}`).catch((err) => {
+          getData(`/${endpoint}`).catch((err) => {
             error(err?.response?.data?.message);
           })
         )
-      ).then(([{ data: projects }, { data: tasks_count }]) => {
-        setProjects(projects?.data?.allprojects);
-        setTasks_count(tasks_count?.data?.task_counts);
+      ).then(([{ allprojects }, { tasks_count }]) => {
+        setProjects(allprojects);
+        setTasks_count(task_counts);
         setLoader(false);
       });
     } catch (err) {
@@ -118,18 +117,18 @@ const Task_home = () => {
     seActiveClass(num);
   };
 
-
   return (
     <>
       <Location main="Dashboard" head="Tasks" />
 
-      {projects.length ? (
+      {projects?.length ? (
         <div className="task_home-projects">
           {/* <div className="task_title">Projects</div> */}
           <Header text="Projects" />
 
           <Swiper
             className="task_home-projects-cards"
+            style={{ zIndex: 1 }}
             modules={[Navigation, Pagination, A11y, Autoplay]}
             spaceBetween={30}
             slidesPerView={3}
@@ -246,7 +245,7 @@ const Task_home = () => {
             <div className="task_home-phases_content">
               <div className="task_title">Tasks Today</div>
               {!spinner ? (
-                !!tasks.length ? (
+                !!tasks?.length ? (
                   <div className="task_home-phases_tasks">
                     {tasks?.map((task, id) => {
                       return (
